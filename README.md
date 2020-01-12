@@ -26,3 +26,11 @@ curl -X POST \
     "distance": 50
 }'
 ```
+
+Response
+
+```json
+{
+    "inside": true
+}
+```
