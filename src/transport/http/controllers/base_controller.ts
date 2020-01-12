@@ -1,12 +1,12 @@
 import { Point } from "../../../domain/entities/point"
-import { RailwayRepositoryInterface } from "../../../domain/interfaces/railway_repository"
+import LocationChecker from "../../../domain/usecases/location_check"
 import PostgresAdapter from "../../../externals/adapters/postgres"
 import RailwayRepository from "../../../externals/repositories/railway"
 import { PostgresAdapterInterface, PostgresConnectionInterface } from "../../../interfaces/postgres_adapter"
 
 export default class BaseController {
 
-    railwayRepository: RailwayRepositoryInterface
+    locationChecker: LocationChecker
 
     constructor() {
 
@@ -21,7 +21,9 @@ export default class BaseController {
 
         let dbAdapter: PostgresAdapterInterface = new PostgresAdapter(connDetails);
         let railwayRepository = new RailwayRepository(dbAdapter)
-        this.railwayRepository = railwayRepository
+
+        this.locationChecker = new LocationChecker(railwayRepository)
+
     }
 
     public CheckOnRailway = (req, res) => {
@@ -34,7 +36,7 @@ export default class BaseController {
 
         let distance: number = req.body.distance;
 
-        this.railwayRepository.CheckOnRailWay(point, distance).then((result) => {
+        this.locationChecker.Check(point, distance).then((result) => {
             res.json({ "inside": result })
             res.status(200)
             res.end();
