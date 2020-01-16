@@ -12,7 +12,7 @@ export default class RailwayRepository implements RailwayRepositoryInterface {
 
     queryString: string = `SELECT EXISTS(
         SELECT way
-        FROM planet_osm_roads
+        FROM data_lk.railways
         WHERE railway = 'rail'
         AND ST_DWithin(CAST(ST_SetSRID( ST_Point( $1, $2), 4326) AS geography), CAST(way AS geography), $3)
     )`;
